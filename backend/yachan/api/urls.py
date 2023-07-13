@@ -1,5 +1,5 @@
 from django.conf.urls.static import static
-from django.urls import path, include
+from django.urls import path
 
 from yachan import settings
 from .views import *
