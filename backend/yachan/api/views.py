@@ -1,23 +1,26 @@
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from rest_framework.response import Response
+from rest_framework.viewsets import *
 
-from .models import Category, ThreadModel, Post, ImageModel
-from .serializers import CategorySerializer, ThreadSerializer, PostSerializer, ImageModelSerializer
+from .serializers import *
 
 
-class CategoryViewSet(ModelViewSet):
+class CategoryViewSet(ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
 
 
-class ThreadViewSet(ModelViewSet):
+class ThreadViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
+                    GenericViewSet):
     queryset = ThreadModel.objects.all()
     serializer_class = ThreadSerializer
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.ListModelMixin,
+                  GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-

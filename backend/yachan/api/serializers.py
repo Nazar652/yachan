@@ -1,9 +1,9 @@
 from datetime import datetime
 import re
 
-from rest_framework.serializers import ModelSerializer, ListField, ImageField
+from rest_framework.serializers import ModelSerializer, ListField
 
-from .models import Category, ThreadModel, Post, ImageModel
+from .models import *
 
 
 def img_name_to_date(img_name):
