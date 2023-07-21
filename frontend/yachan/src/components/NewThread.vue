@@ -10,7 +10,7 @@
   const text = ref('')
   const author_name = ref('')
   const category = ref('')
-  const images = ref(null)
+  const uploaded_images = ref(null)
 
   const { newThread } = useNewThread()
 
@@ -21,7 +21,7 @@
         text: text.value,
         author_name: author_name.value,
         category: category.value,
-        images: images.value.files,
+        uploaded_images: uploaded_images.value.files,
         author: 'author'
       };
 
@@ -31,7 +31,7 @@
       text.value = '';
       author_name.value = '';
       category.value = '';
-      images.value.value = null;
+      uploaded_images.value.files = null;
     } catch (error) {
       console.error(error);
     }
@@ -49,8 +49,8 @@
     <select id="category" v-model="category" required>
       <option v-for="cat in categories" :value="cat.id" v-bind:key="cat.id">{{ cat.name }}</option>
     </select>
-    <label for="images">Images:</label>
-    <input type="file" id="images" ref="images" multiple accept="image/*" required>
+    <label for="upload_images">Images:</label>
+    <input type="file" id="uploaded_images" ref="uploaded_images" multiple accept="image/*" required>
     <button type="submit">Submit</button>
   </form>
 </template>

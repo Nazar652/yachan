@@ -58,7 +58,7 @@ class PostSerializer(ModelSerializer):
     )
 
     class Meta:
-        model = ThreadModel
+        model = Post
         fields = ["id", "subject", "text", "updated_text", "time_created", "time_updated", "author", "author_name",
                   "thread", "images", "uploaded_images"]
 

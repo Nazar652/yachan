@@ -3,13 +3,17 @@
   import axios from 'axios'
 
   let threads = ref(null)
-  axios.get('http://127.0.0.1:8000/api/threads')
-  .then(response => {
-    threads.value = response.data
-  })
-  .catch(error => {
-    console.error(error)
-  })
+  function fetchThreads() {
+    axios.get('http://127.0.0.1:8000/api/threads')
+        .then(response => {
+          threads.value = response.data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+  }
+  setInterval(fetchThreads, 1000)
+
 </script>
 
 <template>
