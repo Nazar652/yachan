@@ -11,9 +11,5 @@ urlpatterns = [
     path('threads/', ThreadListAPI.as_view()),
     path('threads/<int:pk>/', ThreadDetailAPI.as_view()),
     path('posts/', PostListAPI.as_view()),
-    path('posts/<int:pk>/', PostDetailAPI.as_view()),
+    path('posts/<int:pk>/', PostDetailAPI.as_view())
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

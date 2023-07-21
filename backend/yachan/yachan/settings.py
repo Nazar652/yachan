@@ -134,9 +134,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = str(BASE_DIR) + "/media"
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 MEDIA_URL = '/media/'
 
 CORS_ORIGIN_WHITELIST = [
-    'http://192.168.31.195:8080',
+    'http://192.168.31.194:8080',
 ]

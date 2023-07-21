@@ -1,11 +1,4 @@
-from django.core.exceptions import ValidationError
 from django.db.models import *
-from django.contrib.postgres.fields import ArrayField
-
-
-def validate_non_empty(value):
-    if not value:
-        raise ValidationError("At least one item is required.")
 
 
 class Category(Model):
@@ -23,7 +16,6 @@ class ThreadModel(Model):
     author = CharField()
     author_name = CharField(max_length=255, default=None)
     time_created = DateTimeField(auto_now_add=True)
-    images = ArrayField(ImageField(upload_to='img/'), size=10, validators=[validate_non_empty])
     category = ForeignKey(Category, on_delete=CASCADE)
 
 
@@ -36,3 +28,23 @@ class Post(Model):
     author = CharField()
     author_name = CharField(max_length=255, default=None)
     thread = ForeignKey(ThreadModel, on_delete=CASCADE)
+
+
+class ImageModel(Model):
+    image = ImageField(upload_to='img/')
+    thread = ForeignKey(
+        ThreadModel,
+        on_delete=CASCADE,
+        null=True,
+        blank=True,
+        limit_choices_to={'post': None},
+        related_name='images'
+    )
+    post = ForeignKey(
+        Post,
+        on_delete=CASCADE,
+        null=True,
+        blank=True,
+        limit_choices_to={'thread': None},
+        related_name='images'
+    )

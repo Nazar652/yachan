@@ -26,9 +26,9 @@
       <p>time created:</p>
       <p>{{ thread.time_created }}</p>
     </div>
-<!--    <div class="images">-->
-<!--      <img v-for="img in thread.images" :src="img.photo" alt="image" v-bind:key="img.id">-->
-<!--    </div>-->
+    <div class="images">
+      <img v-for="img in thread.images" :src="img.image" alt="image" v-bind:key="img.id">
+    </div>
     <div class="text">
       <p>{{ thread.text }}</p>
     </div>

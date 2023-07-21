@@ -1,8 +1,8 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.response import Response
 
-from .models import Category, ThreadModel, Post
-from .serializers import CategorySerializer, ThreadSerializer, PostSerializer
+from .models import Category, ThreadModel, Post, ImageModel
+from .serializers import CategorySerializer, ThreadSerializer, PostSerializer, ImageModelSerializer
 
 
 class CategoryDetailAPI(RetrieveUpdateDestroyAPIView):
