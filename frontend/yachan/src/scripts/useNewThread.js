@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default function useNewThread() {
-  const newThread = async (threadData) => {
+  const newThread = async (threadData, url) => {
     try {
       const formData = new FormData();
       formData.append('subject', threadData.subject);
@@ -13,7 +13,7 @@ export default function useNewThread() {
         formData.append('uploaded_images', threadData.uploaded_images[i]);
       }
 
-      const response = await axios.post('http://127.0.0.1:8000/api/threads/', formData, {
+      const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

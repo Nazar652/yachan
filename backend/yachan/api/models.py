@@ -14,20 +14,26 @@ class ThreadModel(Model):
     subject = CharField(max_length=255)
     text = CharField(max_length=2000)
     author = CharField()
-    author_name = CharField(max_length=255, default=None)
+    author_name = CharField(max_length=255, null=True, default=None)
     time_created = DateTimeField(auto_now_add=True)
     category = ForeignKey(Category, on_delete=CASCADE)
 
+    class Meta:
+        ordering = ['-id']
+
 
 class Post(Model):
-    subject = CharField(max_length=255, default=None)
+    subject = CharField(max_length=255, null=True, default=None)
     text = CharField(max_length=2000)
-    updated_text = CharField(max_length=2000, default=None)
+    updated_text = CharField(max_length=2000, null=True, default=None)
     time_created = DateTimeField(auto_now_add=True)
     time_updated = DateTimeField(auto_now=True)
     author = CharField()
-    author_name = CharField(max_length=255, default=None)
+    author_name = CharField(max_length=255, null=True, default=None)
     thread = ForeignKey(ThreadModel, on_delete=CASCADE)
+
+    class Meta:
+        ordering = ['-id']
 
 
 class ImageModel(Model):

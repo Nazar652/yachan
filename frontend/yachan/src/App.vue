@@ -1,30 +1,38 @@
 <template>
-  <MainComponent/>
-  <Suspense>
-    <NewThread/>
-  </Suspense>
+  <router-view name="header"></router-view>
+  <div>
+    <router-view></router-view>
+  </div>
+  <router-view name="footer"></router-view>
+
+<!--  <Suspense>-->
+<!--    <NewThread/>-->
+<!--  </Suspense>-->
+<!--  <GetThreads/>-->
+
 </template>
 
 <script>
-import MainComponent from './components/MainComponent.vue'
-import NewThread from "@/components/NewThread.vue";
+  // import NewThread from "@/components/included_components/NewThread.vue";
+  // import GetThreads from "@/components/GetThreads.vue";
 
-export default {
-  name: 'App',
-  components: {
-    NewThread,
-    MainComponent
+  export default {
+    name: 'App',
+    components: {
+      // GetThreads,
+      // NewThread
+    }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    background-color: lightblue;
+  }
 </style>
