@@ -1,10 +1,11 @@
 import axios from 'axios';
+import {hostname} from "@/scripts/globalVariables";
 
 
-export default async function fetchCategories(url) {
+export default async function fetchCategories() {
   try {
-    const response = await axios.get(`${url}/api/categories`);
-    return response.data;
+    const response = await axios.get(`${hostname}/api/categories`)
+    return response.data
   } catch (error) {
     console.error(error);
   }

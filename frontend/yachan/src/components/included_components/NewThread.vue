@@ -2,16 +2,16 @@
   import { ref } from 'vue';
   import useNewThread from '@/scripts/useNewThread'
   import {hostname} from "@/scripts/globalVariables"
-  import fetchCategories from "@/scripts/fetchCategories";
+
+  const props = defineProps(['category'])
 
   const subject = ref('')
   const text = ref('')
   const author_name = ref('')
-  const category = ref('')
+  const category = props.category
   const uploaded_images = ref(null)
 
   const { newThread } = useNewThread()
-  const categories = await fetchCategories(hostname)
 
   const submitForm = async () => {
     try {
@@ -19,7 +19,7 @@
         subject: subject.value,
         text: text.value,
         author_name: author_name.value,
-        category: category.value,
+        category: category,
         uploaded_images: uploaded_images.value.files,
         author: 'author'
       };
@@ -29,7 +29,6 @@
       subject.value = '';
       text.value = '';
       author_name.value = '';
-      category.value = '';
       uploaded_images.value.files = null;
     } catch (error) {
       console.error(error);
@@ -45,10 +44,6 @@
         <input v-model="author_name" type="text" placeholder="Name" />
       </div>
       <textarea id="text" v-model="text" placeholder="Text" required></textarea>
-      <label for="category">Category:</label>
-      <select id="category" v-model="category" required>
-        <option v-for="cat in categories" :value="cat.id" v-bind:key="cat.id">{{ cat.name }}</option>
-      </select>
       <label for="upload_images">Images:</label>
       <input type="file" id="uploaded_images" ref="uploaded_images" multiple accept="image/*" required>
       <button type="submit">Submit</button>
