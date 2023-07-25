@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref, defineProps } from 'vue';
   import useNewThread from '@/scripts/useNewThread'
   import {hostname} from "@/scripts/globalVariables"
 
@@ -8,7 +8,7 @@
   const subject = ref('')
   const text = ref('')
   const author_name = ref('')
-  const category = props.category
+  const category = ref(props.category)
   const uploaded_images = ref(null)
 
   const { newThread } = useNewThread()
@@ -19,11 +19,11 @@
         subject: subject.value,
         text: text.value,
         author_name: author_name.value,
-        category: category,
+        category: category.value,
         uploaded_images: uploaded_images.value.files,
         author: 'author'
       };
-
+      console.log(threadData)
       await newThread(threadData, `${hostname}/api/threads/`);
 
       subject.value = '';

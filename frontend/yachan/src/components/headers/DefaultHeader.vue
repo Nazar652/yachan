@@ -1,8 +1,7 @@
 <script setup>
   import { defineProps } from 'vue'
 
-  const props = defineProps(['navItems'])
-  console.log(props.navItems)
+  defineProps(['navItems'])
 </script>
 
 <template>

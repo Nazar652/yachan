@@ -39,15 +39,6 @@ class ThreadSerializer(ModelSerializer):
         fields = ["id", "subject", "text", "author", "author_name", "time_created", "category", "images",
                   "uploaded_images"]
 
-    def create(self, validated_data):
-        uploaded_images = validated_data.pop("uploaded_images")
-        thread = ThreadModel.objects.create(**validated_data)
-        for image in uploaded_images:
-            image.name = img_name_to_date(image.name)
-            ImageModel.objects.create(thread=thread, image=image)
-
-        return thread
-
 
 class PostSerializer(ModelSerializer):
     images = ImageModelSerializer(many=True, read_only=True)

@@ -2,7 +2,7 @@
   <Suspense>
     <router-view name="header"></router-view>
   </Suspense>
-  <div>
+  <div class="wrapper">
     <router-view></router-view>
   </div>
   <router-view name="footer"></router-view>
@@ -36,5 +36,10 @@
   body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     background-color: lightblue;
+  }
+
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
   }
 </style>

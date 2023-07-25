@@ -16,10 +16,11 @@ class ThreadModel(Model):
     author = CharField()
     author_name = CharField(max_length=255, null=True, default=None)
     time_created = DateTimeField(auto_now_add=True)
-    category = ForeignKey(Category, on_delete=CASCADE)
+    last_post = DateTimeField(auto_now=True)
+    category = ForeignKey(Category, on_delete=CASCADE, to_field='slug')
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['last_post']
 
 
 class Post(Model):
@@ -33,7 +34,7 @@ class Post(Model):
     thread = ForeignKey(ThreadModel, on_delete=CASCADE)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['time_created']
 
 
 class ImageModel(Model):

@@ -15,5 +15,6 @@ urlpatterns = [
     # path('threads/<int:pk>/', ThreadDetailAPI.as_view()),
     # path('posts/', PostListAPI.as_view()),
     # path('posts/<int:pk>/', PostDetailAPI.as_view())
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('polling/', polling_handling)
 ]
