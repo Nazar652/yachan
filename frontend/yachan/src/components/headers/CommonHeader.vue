@@ -1,5 +1,5 @@
 <script setup>
-  import fetchCategories from "@/scripts/fetchCategories";
+  import fetchCategories from "@/scripts/categories/fetchCategories";
   import DefaultHeader from "@/components/headers/DefaultHeader.vue";
 
   const categories = await fetchCategories()
@@ -13,7 +13,7 @@
     navItems.push(
         {
           name: cat.name,
-          url: '/' + cat.slug
+          url: '/cat/' + cat.slug
         }
     )
   }

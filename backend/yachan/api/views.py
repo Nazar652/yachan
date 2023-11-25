@@ -5,6 +5,8 @@ from rest_framework.viewsets import *
 from .serializers import *
 from .signals import PollingHandler
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class CategoryViewSet(ReadOnlyModelViewSet):
     queryset = Category.objects.all()
@@ -18,6 +20,9 @@ class ThreadViewSet(mixins.CreateModelMixin,
                     GenericViewSet):
     queryset = ThreadModel.objects.all()
     serializer_class = ThreadSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = '__all__'
 
     def create(self, request, *args, **kwargs):
         print(request.data)
@@ -35,6 +40,9 @@ class PostViewSet(mixins.CreateModelMixin,
                   GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = '__all__'
 
 
 def polling_handling(request):

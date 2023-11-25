@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api.apps.ApiConfig',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,7 @@ MEDIA_URL = '/media/'
 # ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

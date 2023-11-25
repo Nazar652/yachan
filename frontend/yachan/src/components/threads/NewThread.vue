@@ -1,7 +1,7 @@
 <script setup>
   import { ref, defineProps } from 'vue';
-  import useNewThread from '@/scripts/useNewThread'
-  import {hostname} from "@/scripts/globalVariables"
+  import createNewThread from '@/scripts/threads/createNewThread'
+  import {hostname} from "@/scripts/global/globalVariables"
 
   const props = defineProps(['category'])
 
@@ -11,7 +11,7 @@
   const category = ref(props.category)
   const uploaded_images = ref(null)
 
-  const { newThread } = useNewThread()
+  const { newThread } = createNewThread()
 
   const submitForm = async () => {
     try {
@@ -23,8 +23,7 @@
         uploaded_images: uploaded_images.value.files,
         author: 'author'
       };
-      console.log(threadData)
-      await newThread(threadData, `${hostname}/api/threads/`);
+      await newThread(threadData);
 
       subject.value = '';
       text.value = '';

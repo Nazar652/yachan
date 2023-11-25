@@ -1,5 +1,6 @@
 import axios from 'axios';
-import {hostname} from "@/scripts/globalVariables";
+import {hostname} from "@/scripts/global/globalVariables";
+
 
 
 export default async function fetchCategories() {

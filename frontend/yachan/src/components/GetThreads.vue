@@ -2,7 +2,7 @@
 
   import { ref } from 'vue'
   import axios from 'axios'
-  import {hostname} from "@/scripts/globalVariables";
+  import {hostname} from "@/scripts/global/globalVariables";
 
   let threads = ref(null)
   function fetchThreads() {
