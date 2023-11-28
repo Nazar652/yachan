@@ -3,4 +3,9 @@ import App from './App.vue'
 import { router } from './scripts/global/router'
 
 
-createApp(App).use(router).mount('#app')
+createApp(App)
+    .mixin({
+        inheritAttrs: false
+})
+    .use(router)
+    .mount('#app')

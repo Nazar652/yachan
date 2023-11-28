@@ -50,12 +50,13 @@ class ThreadSerializer(ModelSerializer):
 
 
 class PostSerializer(ModelSerializer):
-    images = ImageModelSerializer(many=True, read_only=True)
+    images = ImageModelSerializer(many=True, read_only=True, required=False)
     uploaded_images = ListField(
         child=ImageField(allow_empty_file=False),
         allow_empty=False,
         max_length=5,
-        write_only=True
+        write_only=True,
+        required=False
     )
 
     class Meta:
@@ -64,10 +65,10 @@ class PostSerializer(ModelSerializer):
                   "thread", "images", "uploaded_images"]
 
     def create(self, validated_data):
-        uploaded_images = validated_data.pop("uploaded_images")
+        uploaded_images = validated_data.pop("uploaded_images", [])
         post = Post.objects.create(**validated_data)
         for image in uploaded_images:
             image.name = img_name_to_date(image.name)
-            ImageModel.objects.create(thread=post, image=image)
+            ImageModel.objects.create(post=post, image=image)
 
         return post

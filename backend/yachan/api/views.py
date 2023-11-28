@@ -14,10 +14,7 @@ class CategoryViewSet(ReadOnlyModelViewSet):
     lookup_field = 'slug'
 
 
-class ThreadViewSet(mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    GenericViewSet):
+class ThreadViewSet(ModelViewSet):
     queryset = ThreadModel.objects.all()
     serializer_class = ThreadSerializer
 
@@ -33,11 +30,7 @@ class ThreadViewSet(mixins.CreateModelMixin,
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class PostViewSet(mixins.CreateModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.ListModelMixin,
-                  GenericViewSet):
+class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 

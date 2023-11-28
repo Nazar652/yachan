@@ -2,7 +2,7 @@ import axios from 'axios';
 import {hostname} from "@/scripts/global/globalVariables";
 
 export default function createNewPost() {
-  const newPost = async (postData, url) => {
+  const newPost = async (postData) => {
     try {
       const formData = new FormData();
       formData.append('subject', postData.subject);

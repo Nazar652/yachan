@@ -1,7 +1,6 @@
 <script setup>
   import { ref, defineProps } from 'vue';
   import createNewThread from '@/scripts/threads/createNewThread'
-  import {hostname} from "@/scripts/global/globalVariables"
 
   const props = defineProps(['category'])
 
@@ -15,6 +14,10 @@
 
   const submitForm = async () => {
     try {
+      if (uploaded_images.value.files.length > 5) {
+        alert("You can only upload a maximum of 5 images")
+        return
+      }
       const threadData = {
         subject: subject.value,
         text: text.value,
@@ -28,7 +31,7 @@
       subject.value = '';
       text.value = '';
       author_name.value = '';
-      uploaded_images.value.files = null;
+      uploaded_images.value.value = null;
     } catch (error) {
       console.error(error);
     }
