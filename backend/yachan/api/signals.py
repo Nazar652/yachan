@@ -9,7 +9,15 @@ from .models import ThreadModel, Post
 def threads_model_updates(sender, instance, created, **kwargs):
     if created:
         instance.last_post = instance.time_created
-        print("thread created")
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'thread',
+            {
+                'type': 'send.new.thread.notification',
+                'data': {
+                    'category': instance.category.slug,
+                }
+            })
 
 
 @receiver(post_save, sender=Post)

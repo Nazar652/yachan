@@ -4,6 +4,8 @@ import fetchThreads from "@/scripts/threads/fetchThreads";
 import {defineProps, onUnmounted, ref, watch} from "vue";
 import SingleThread from "@/components/threads/SingleThread.vue";
 
+const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/threads')
+webSocket.onmessage = handleNewThreadNotification
 
 const props = defineProps(['category'])
 const category = ref(props.category)
@@ -15,14 +17,22 @@ async function getThreads() {
 }
 
 getThreads()
-const intervalId = setInterval(getThreads, 1000)
-watch(() => props.category, (newSlug) => {
-  category.value = newSlug;
+
+watch(() => props.category, async (newSlug) => {
+  category.value = newSlug
+  threads.value = await fetchThreads(category.value)
 });
 
 onUnmounted(() => {
-  clearInterval(intervalId)
+  webSocket.close()
 })
+
+function handleNewThreadNotification(event) {
+  const newThreadData = JSON.parse(event.data);
+  if (newThreadData.data.category === category.value) {
+    getThreads()
+  }
+}
 </script>
 
 <template>

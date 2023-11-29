@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, ref, watch} from 'vue'
+import {defineProps, onUnmounted, ref, watch} from 'vue'
 import NewPost from "@/components/posts/NewPost.vue";
 import fetchPosts from "@/scripts/posts/fetchPosts";
 import fetchSingleThread from "@/scripts/threads/fetchSingleThread";
@@ -26,6 +26,11 @@ watch(() => props.thread_id, async () => {
   threadId.value = thread.value.id
   posts.value = await fetchPosts(threadId.value)
 })
+
+onUnmounted(() => {
+  webSocket.close()
+})
+
 
 function handleNewPostNotification(event) {
   const newPostData = JSON.parse(event.data);
