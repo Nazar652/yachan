@@ -20,7 +20,7 @@ class ThreadModel(Model):
     category = ForeignKey(Category, on_delete=CASCADE, to_field='slug')
 
     class Meta:
-        ordering = ['last_post']
+        ordering = ['-last_post']
 
 
 class Post(Model):

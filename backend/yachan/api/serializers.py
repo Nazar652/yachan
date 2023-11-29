@@ -38,6 +38,7 @@ class ThreadSerializer(ModelSerializer):
         model = ThreadModel
         fields = ["id", "subject", "text", "author", "author_name", "time_created", "category", "images",
                   "uploaded_images"]
+        ordering_fields = ['last_post']
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop("uploaded_images")

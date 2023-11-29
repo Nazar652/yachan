@@ -1,9 +1,12 @@
 <script setup>
-import {defineProps, onUnmounted, ref, watch} from 'vue'
+import {defineProps, ref, watch} from 'vue'
 import NewPost from "@/components/posts/NewPost.vue";
 import fetchPosts from "@/scripts/posts/fetchPosts";
 import fetchSingleThread from "@/scripts/threads/fetchSingleThread";
 import SinglePost from "@/components/posts/SinglePost.vue";
+
+const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/posts')
+webSocket.onmessage = handleNewPostNotification
 
 const props = defineProps(['thread_id'])
 const threadId = ref(props.thread_id)
@@ -11,19 +14,25 @@ const posts = ref(null)
 const thread = ref(null)
 
 thread.value = await fetchSingleThread(threadId.value)
+
 async function getPosts() {
   posts.value = await fetchPosts(threadId.value)
 }
 
 getPosts()
-const intervalId = setInterval(getPosts, 1000)
-watch(() => props.thread_id, (newThread) => {
-  threadId.value = newThread
+
+watch(() => props.thread_id, async () => {
+  thread.value = await fetchSingleThread(threadId.value)
+  threadId.value = thread.value.id
+  posts.value = await fetchPosts(threadId.value)
 })
 
-onUnmounted(() => {
-  clearInterval(intervalId)
-})
+function handleNewPostNotification(event) {
+  const newPostData = JSON.parse(event.data);
+  if (newPostData.data.thread_id === thread.value.id) {
+    getPosts()
+  }
+}
 </script>
 
 <template>
@@ -63,31 +72,31 @@ onUnmounted(() => {
 
 <style scoped>
 
-  .thread-top {
-    display: flex;
-    gap: 10px;
-    font-weight: 700;
-  }
+.thread-top {
+  display: flex;
+  gap: 10px;
+  font-weight: 700;
+}
 
-  .image {
-    width: 200px;
-  }
+.image {
+  width: 200px;
+}
 
-  .thread, .post {
-    padding: 20px;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: wheat;
-  }
+.thread, .post {
+  padding: 20px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: wheat;
+}
 
-  .posts {
-    display: flex;
-    flex-direction: column;
-    max-width: 1200px;
-    margin: 50px auto;
-    align-items: flex-start;
-    gap: 30px;
-  }
+.posts {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 50px auto;
+  align-items: flex-start;
+  gap: 30px;
+}
 </style>

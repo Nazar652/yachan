@@ -16,5 +16,4 @@ urlpatterns = [
     # path('posts/', PostListAPI.as_view()),
     # path('posts/<int:pk>/', PostDetailAPI.as_view())
     path('', include(router.urls)),
-    path('polling/', polling_handling)
 ]
