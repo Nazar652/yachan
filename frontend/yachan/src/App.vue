@@ -1,4 +1,5 @@
 <template>
+  <TokenGenerator/>
   <Suspense>
     <router-view name="header"></router-view>
   </Suspense>
@@ -20,9 +21,12 @@
 // import NewThread from "@/components/included_components/NewThread.vue";
 // import GetThreads from "@/components/GetThreads.vue";
 
+import TokenGenerator from "@/components/main_components/TokenGenerator.vue";
+
 export default {
   name: 'App',
   components: {
+    TokenGenerator
     // GetThreads,
     // NewThread
   }

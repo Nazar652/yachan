@@ -4,90 +4,68 @@ import NewPost from "@/components/posts/NewPost.vue";
 import fetchPosts from "@/scripts/posts/fetchPosts";
 import fetchSingleThread from "@/scripts/threads/fetchSingleThread";
 import SinglePost from "@/components/posts/SinglePost.vue";
+import SingleThread from "@/components/threads/SingleThread.vue";
+import {hostname} from "@/scripts/global/globalVariables";
 
-const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/posts')
-webSocket.onmessage = handleNewPostNotification
 
 const props = defineProps(['thread_id'])
 const threadId = ref(props.thread_id)
 const posts = ref(null)
 const thread = ref(null)
 
-thread.value = await fetchSingleThread(threadId.value)
+const webSocket = new WebSocket(`ws://${hostname}/ws/thread/${threadId.value}/`)
+webSocket.onmessage = threadUpdate
+
 
 async function getPosts() {
   posts.value = await fetchPosts(threadId.value)
 }
 
-getPosts()
-
-watch(() => props.thread_id, async () => {
+async function getThread() {
   thread.value = await fetchSingleThread(threadId.value)
-  threadId.value = thread.value.id
-  posts.value = await fetchPosts(threadId.value)
+}
+
+await getThread()
+await getPosts()
+
+watch(() => props.thread_id,   (newThreadId) => {
+  threadId.value = newThreadId
+  getThread()
+  getPosts()
 })
 
 onUnmounted(() => {
   webSocket.close()
 })
 
-
-function handleNewPostNotification(event) {
+function threadUpdate(event) {
   const newPostData = JSON.parse(event.data);
-  if (newPostData.data.thread_id === thread.value.id) {
+  if (newPostData.type === "send.posts.update.notification") {
     getPosts()
+  } else if (newPostData.type === "send.thread.update.notification") {
+    getThread()
+    console.log(thread.value)
   }
 }
 </script>
 
 <template>
-  <NewPost :threadId="$route.params.thread_id"></NewPost>
+  <NewPost :thread="thread"></NewPost>
 
-  <div class="thread">
-    <div class="thread-top">
-      <div class="subject">
-        <p>subject:</p>
-        <p>{{ thread.subject }}</p>
-      </div>
-      <div class="author-name" v-if="thread.author_name">
-        <p>author:</p>
-        <p>{{ thread.author_name }}</p>
-      </div>
-      <div class="time-created">
-        <p>time created:</p>
-        <p>{{ thread.time_created.replace('T', ' ').slice(0, -8) }}</p>
-      </div>
-    </div>
-    <div class="images">
-      <img v-for="img in thread.images" :src="img.image" alt="image" v-bind:key="img.id" class="image">
-    </div>
-    <div class="text">
-      <p>{{ thread.text }}</p>
-    </div>
-  </div>
+  <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
 
   <div class="posts">
-    <div v-for="post in posts" v-bind:key="post.id" class="post">
+    <div v-for="post in posts" v-bind:key="post.text" class="post">
       <SinglePost :post="post"/>
     </div>
   </div>
 
-  <NewPost :threadId="$route.params.thread_id"></NewPost>
+  <NewPost :thread="thread"></NewPost>
 </template>
 
 <style scoped>
 
-.thread-top {
-  display: flex;
-  gap: 10px;
-  font-weight: 700;
-}
-
-.image {
-  width: 200px;
-}
-
-.thread, .post {
+.post {
   padding: 20px;
   border: 1px solid black;
   display: flex;

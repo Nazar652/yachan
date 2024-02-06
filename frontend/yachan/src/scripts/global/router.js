@@ -27,7 +27,7 @@ const routes = [
             header: CommonHeader,
             footer: CommonFooter
         }
-    },
+    }, // TODO add 404 for non-existing pages
     {
         path: '/cat/:category/:thread_id',
         name: 'thread',

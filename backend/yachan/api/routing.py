@@ -1,8 +1,7 @@
-from django.urls import path
-from .consumers import PostConsumer, ThreadConsumer
+from django.urls import path, re_path
+from .consumers import CategoryConsumer, ThreadConsumer
 
 websocket_urlpatterns = [
-    path('ws/posts', PostConsumer.as_asgi()),
-    path('ws/threads', ThreadConsumer.as_asgi()),
-    # Add more WebSocket URLs and corresponding consumers as needed
+    re_path(r'ws/category/(?P<category>\w+)/$', CategoryConsumer.as_asgi()),
+    re_path(r'ws/thread/(?P<thread_id>\w+)/$', ThreadConsumer.as_asgi()),
 ]

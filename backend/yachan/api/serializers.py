@@ -62,7 +62,7 @@ class PostSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = ["id", "subject", "text", "updated_text", "time_created", "time_updated", "author", "author_name",
-                  "thread", "images", "uploaded_images"]
+                  "thread", "images", "uploaded_images", "is_op"]
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop("uploaded_images", [])

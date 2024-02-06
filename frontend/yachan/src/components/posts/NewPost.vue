@@ -1,13 +1,14 @@
 <script setup>
 import { ref, defineProps } from 'vue';
   import createNewPost from '@/scripts/posts/createNewPost'
+import {getToken} from "@/scripts/global/tokenUtils";
 
-  const props = defineProps(['threadId'])
+  const props = defineProps(['thread'])
 
   const subject = ref('')
   const text = ref('')
   const author_name = ref('')
-  const threadId = ref(props.threadId)
+  const thread = ref(props.thread)
   const uploaded_images = ref(null)
 
   const { newPost } = createNewPost()
@@ -18,13 +19,19 @@ import { ref, defineProps } from 'vue';
         alert("You can only upload a maximum of 5 images")
         return
       }
+      let is_op = false
+      console.log(thread.value.author)
+      if (thread.value.author === getToken()) {
+        is_op = true
+      }
       const threadData = {
         subject: subject.value,
         text: text.value,
         author_name: author_name.value,
-        thread: threadId.value,
+        thread: thread.value.id,
         uploaded_images: uploaded_images.value.files,
-        author: 'author'
+        author: getToken(),
+        is_op: is_op
       };
       await newPost(threadData);
 

@@ -7,17 +7,26 @@ from .models import ThreadModel, Post
 
 @receiver(post_save, sender=ThreadModel)
 def threads_model_updates(sender, instance, created, **kwargs):
+    print(instance.category.slug)
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f'thread_{instance.id}',
+        {
+            'type': 'send.thread.update.notification',
+            'data': {
+                'thread_id': instance.id,
+            }
+        })
+    async_to_sync(channel_layer.group_send)(
+        f'category_{instance.category.slug}',
+        {
+            'type': 'send.threads.update.notification',
+            'data': {
+                'category': instance.category.slug,
+            }
+        })
     if created:
         instance.last_post = instance.time_created
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'thread',
-            {
-                'type': 'send.new.thread.notification',
-                'data': {
-                    'category': instance.category.slug,
-                }
-            })
 
 
 @receiver(post_save, sender=Post)
@@ -25,15 +34,12 @@ def post_model_updates(sender, instance, created, **kwargs):
     if created:
         instance.thread.last_post = instance.time_created
         instance.thread.save()
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'post',
-            {
-                'type': 'send.new.post.notification',
-                'data': {
-                    'thread_id': instance.thread.id,
-                }
-            })
-
-    else:
-        print(f"post updated")
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f'thread_{instance.thread.id}',
+        {
+            'type': 'send.posts.update.notification',
+            'data': {
+                'thread_id': instance.thread.id,
+            }
+        })

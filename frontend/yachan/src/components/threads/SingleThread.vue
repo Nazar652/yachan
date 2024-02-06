@@ -1,13 +1,26 @@
 <script setup>
 import {defineProps, ref} from 'vue'
+import {getToken} from "@/scripts/global/tokenUtils";
+import EditThread from "@/components/threads/EditThread.vue";
 
-const props = defineProps(['thread'])
+const props = defineProps(['thread', 'isOpen'])
+const thread = ref(props.thread)
+const isOpen = ref(props.isOpen)
 
-const thread = ref(props.thread);
+let edit = ref(false)
+
+const toggleEdit = () => {
+  edit.value = !edit.value;
+};
+
+const setEdit = (value) => {
+  edit.value = value;
+};
+
 </script>
 
 <template>
-  <div>
+  <div class="thread">
     <div class="thread-top">
       <div class="subject">
         <p>subject:</p>
@@ -21,6 +34,9 @@ const thread = ref(props.thread);
         <p>time created:</p>
         <p>{{ thread.time_created.replace('T', ' ').slice(0, -8) }}</p>
       </div>
+      <div class="edit" v-if="thread.author === getToken()" @click="toggleEdit">
+        Edit thread
+      </div>
     </div>
     <div class="images">
       <img v-for="img in thread.images" :src="img.image" alt="image" v-bind:key="img.id" class="image">
@@ -28,8 +44,11 @@ const thread = ref(props.thread);
     <div class="text">
       <p>{{ thread.text }}</p>
     </div>
-    <div class="post-link">
-      <router-link :to="`${thread.category}/${thread.id}`">To thread</router-link>
+    <div class="edit-panel" v-if="edit && thread.author === getToken()">
+      <EditThread :thread="thread" :setEdit="setEdit"></EditThread>
+    </div>
+    <div class="post-link" v-if="!isOpen">
+      <router-link :to="{ name: 'thread', params: { category: thread.category, thread_id: thread.id }}">To thread</router-link>
     </div>
   </div>
 </template>
@@ -43,5 +62,14 @@ const thread = ref(props.thread);
 
 .image {
   width: 200px;
+}
+
+.thread {
+  padding: 20px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: wheat;
 }
 </style>

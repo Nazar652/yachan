@@ -1,6 +1,7 @@
 <script setup>
-  import { ref, defineProps } from 'vue';
+import {ref, defineProps, watch} from 'vue';
   import createNewThread from '@/scripts/threads/createNewThread'
+import {getToken} from "@/scripts/global/tokenUtils";
 
   const props = defineProps(['category'])
 
@@ -24,7 +25,7 @@
         author_name: author_name.value,
         category: category.value,
         uploaded_images: uploaded_images.value.files,
-        author: 'author'
+        author: getToken()
       };
       await newThread(threadData);
 
@@ -36,11 +37,14 @@
       console.error(error);
     }
   }
+  watch(() => props.category, (newSlug) => {
+    category.value = newSlug
+});
 </script>
 
 <template>
   <div class="newThread">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" id="newThreadForm">
       <div>
         <input v-model="subject" type="text" placeholder="Subject" required />
         <input v-model="author_name" type="text" placeholder="Name" />

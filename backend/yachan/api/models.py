@@ -32,6 +32,7 @@ class Post(Model):
     author = CharField()
     author_name = CharField(max_length=255, null=True, default=None)
     thread = ForeignKey(ThreadModel, on_delete=CASCADE)
+    is_op = BooleanField(default=False)
 
     class Meta:
         ordering = ['time_created']
