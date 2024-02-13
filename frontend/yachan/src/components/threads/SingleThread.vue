@@ -56,20 +56,60 @@ const setEdit = (value) => {
 <style scoped>
 .thread-top {
   display: flex;
-  gap: 10px;
-  font-weight: 700;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 10px;
 }
 
 .image {
   width: 200px;
 }
 
-.thread {
-  padding: 20px;
-  border: 1px solid black;
+.subject, .author-name, .time-created {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: wheat;
+  gap: 5px;
+}
+
+.edit {
+  background-color: #3498db;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-panel {
+  margin-top: 10px;
+}
+
+.text {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+.images {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.images img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.thread {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.thread:hover .edit, .thread:hover .edit-panel {
+  display: block;
 }
 </style>

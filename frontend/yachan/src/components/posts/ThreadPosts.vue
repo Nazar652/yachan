@@ -65,15 +65,6 @@ function threadUpdate(event) {
 
 <style scoped>
 
-.post {
-  padding: 20px;
-  border: 1px solid black;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: wheat;
-}
-
 .posts {
   display: flex;
   flex-direction: column;

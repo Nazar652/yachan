@@ -63,13 +63,39 @@ import {getToken} from "@/scripts/global/tokenUtils";
 
 <style scoped>
   .newPost {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 50px;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px auto;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.newPost form {
+  display: flex;
+  flex-direction: column;
+}
+
+.newPost input, .newPost textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #888;
+}
+
+.newPost button {
+  background-color: #3498db;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.newPost button:hover {
+  background-color: #2980b9;
+}
 </style>
