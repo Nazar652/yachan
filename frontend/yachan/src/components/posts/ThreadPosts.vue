@@ -6,7 +6,9 @@ import fetchSingleThread from "@/scripts/threads/fetchSingleThread";
 import SinglePost from "@/components/posts/SinglePost.vue";
 import SingleThread from "@/components/threads/SingleThread.vue";
 import {hostname} from "@/scripts/global/globalVariables";
+import {useRouter} from 'vue-router';
 
+const router = useRouter();
 
 const props = defineProps(['thread_id'])
 const threadId = ref(props.thread_id)
@@ -16,22 +18,26 @@ const thread = ref(null)
 const webSocket = new WebSocket(`ws://${hostname}/ws/thread/${threadId.value}/`)
 webSocket.onmessage = threadUpdate
 
+async function getThread() {
+  thread.value = await fetchSingleThread(threadId.value)
+}
 
 async function getPosts() {
   posts.value = await fetchPosts(threadId.value)
 }
 
-async function getThread() {
-  thread.value = await fetchSingleThread(threadId.value)
+try {
+  await getThread()
+  await getPosts()
+} catch (e) {
+  router.push({name: 'notFound'})
 }
 
-await getThread()
-await getPosts()
 
-watch(() => props.thread_id,   (newThreadId) => {
+watch(() => props.thread_id, async (newThreadId) => {
   threadId.value = newThreadId
-  getThread()
-  getPosts()
+  await getThread()
+  await getPosts()
 })
 
 onUnmounted(() => {
@@ -50,17 +56,18 @@ function threadUpdate(event) {
 </script>
 
 <template>
-  <NewPost :thread="thread"></NewPost>
+  <div v-if="thread !== null">
+    <NewPost :thread="thread"></NewPost>
 
-  <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
+    <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
 
-  <div class="posts">
-    <div v-for="post in posts" v-bind:key="post.text" class="post">
-      <SinglePost :post="post"/>
+    <div class="posts">
+      <div v-for="post in posts" v-bind:key="post.text" class="post">
+        <SinglePost :post="post"/>
+      </div>
     </div>
+    <NewPost :thread="thread"></NewPost>
   </div>
-
-  <NewPost :thread="thread"></NewPost>
 </template>
 
 <style scoped>
@@ -73,4 +80,6 @@ function threadUpdate(event) {
   align-items: flex-start;
   gap: 30px;
 }
+
+
 </style>

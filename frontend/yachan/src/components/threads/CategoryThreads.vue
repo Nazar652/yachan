@@ -4,18 +4,23 @@ import fetchThreads from "@/scripts/threads/fetchThreads";
 import {defineProps, onUnmounted, ref, watch} from "vue";
 import SingleThread from "@/components/threads/SingleThread.vue";
 import {hostname} from "@/scripts/global/globalVariables";
-
-
+import { useRouter } from 'vue-router'
 
 const props = defineProps(['category'])
 const category = ref(props.category)
 const threads = ref(null)
+const router = useRouter()
+
 
 const webSocket = new WebSocket(`ws://${hostname}/ws/category/${category.value}/`)
 webSocket.onmessage = categoryUpdate
 
 async function getThreads() {
   threads.value = await fetchThreads(category.value)
+  console.log(threads.value)
+  if (!threads.value) {
+    await router.push({name: 'notFound'})
+  }
   console.log(threads.value)
 }
 

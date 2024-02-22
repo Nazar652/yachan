@@ -9,26 +9,15 @@
     </Suspense>
   </div>
   <router-view name="footer"></router-view>
-
-  <!--  <Suspense>-->
-  <!--    <NewThread/>-->
-  <!--  </Suspense>-->
-  <!--  <GetThreads/>-->
-
 </template>
 
 <script>
-// import NewThread from "@/components/included_components/NewThread.vue";
-// import GetThreads from "@/components/GetThreads.vue";
-
 import TokenGenerator from "@/components/main_components/TokenGenerator.vue";
 
 export default {
   name: 'App',
   components: {
     TokenGenerator
-    // GetThreads,
-    // NewThread
   }
 }
 </script>
@@ -41,7 +30,7 @@ export default {
 
 body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  background-color: lightblue;
+  background-color: #e0f0f8;
 }
 
 .wrapper {

@@ -7,7 +7,7 @@
 
 <template>
   <header >
-      <router-link v-for="item in navItems" v-bind:key="item.id" :to="item.url"><p class="nav-item">/{{ item.name }}/</p></router-link>
+      <router-link v-for="item in navItems" v-bind:key="item.id" :to="item.url"><p class="nav-item">{{ item.name }}</p></router-link>
   </header>
 </template>
 
@@ -19,6 +19,12 @@ header {
   align-items: stretch;
   gap: 5px;
   height: 30px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
 }
 
 a {
@@ -30,14 +36,14 @@ a {
   font-family: 'PT Mono', monospace;
   text-transform: lowercase;
   flex-basis: 100px;
-
   background-color: #3498db;
-  transform: skewX(-24deg);
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
 }
 
-.nav-item {
 
-  transform: skewX(24deg);
+a:hover {
+  background-color: #2980b9;
 }
-
 </style>
