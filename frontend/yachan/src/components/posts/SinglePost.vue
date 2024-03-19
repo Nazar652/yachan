@@ -7,6 +7,7 @@ const props = defineProps(['post'])
 const post = ref(props.post);
 
 let edit = ref(false)
+let showOldText = ref(false)
 
 const toggleEdit = () => {
   edit.value = !edit.value;
@@ -16,7 +17,13 @@ const setEdit = (value) => {
   edit.value = value;
 }
 
-// const text = ref(post.value.updated_text ? post.value.updated_text : post.value.text)
+const showUpdatedText = () => {
+  showOldText.value = false;
+}
+
+const showOriginalText = () => {
+  showOldText.value = true;
+}
 
 </script>
 
@@ -36,15 +43,18 @@ const setEdit = (value) => {
         <p>{{ post.time_created.replace('T', ' ').slice(0, -8) }}</p>
       </div>
       <div class="op" v-if="post.is_op">OP</div>
-      <div class="edit" v-if="post.author === getToken()" @click="toggleEdit">
+      <div class="edit" v-if="post.author === getToken() && !post.updated_text" @click="toggleEdit">
         Edit post
+      </div>
+      <div class="show_old" v-if="post.updated_text" @mouseover="showOriginalText" @mouseleave="showUpdatedText">
+        Show old
       </div>
     </div>
     <div class="images">
       <img v-for="img in post.images" :src="img.image" alt="image" v-bind:key="img.id" class="image">
     </div>
     <div class="text">
-      <p>{{ post.updated_text ? post.updated_text : post.text }}</p>
+      <p>{{ post.updated_text ? (showOldText ? post.text : post.updated_text) : post.text }}</p>
     </div>
     <div class="edit-panel" v-if="edit && post.author === getToken() && !post.updated_text">
       <EditPost :post="post" :setEdit="setEdit"></EditPost>

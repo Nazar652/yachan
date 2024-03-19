@@ -13,7 +13,7 @@ const submitForm = async () => {
   try {
     const newData = {
       id: post.value.id,
-      text: text.value,
+      updated_text: text.value,
     };
     await editPost(newData);
     props.setEdit(false)

@@ -15,8 +15,6 @@ const threadId = ref(props.thread_id)
 const posts = ref(null)
 const thread = ref(null)
 
-const webSocket = new WebSocket(`ws://${hostname}/ws/thread/${threadId.value}/`)
-webSocket.onmessage = threadUpdate
 
 async function getThread() {
   thread.value = await fetchSingleThread(threadId.value)
@@ -33,6 +31,8 @@ try {
   router.push({name: 'notFound'})
 }
 
+const webSocket = new WebSocket(`ws://${hostname}/ws/thread/${threadId.value}/`)
+webSocket.onmessage = threadUpdate
 
 watch(() => props.thread_id, async (newThreadId) => {
   threadId.value = newThreadId
@@ -57,6 +57,9 @@ function threadUpdate(event) {
 
 <template>
   <div v-if="thread !== null">
+  <component :is="'script'">
+  console.log(4)
+  </component>
     <NewPost :thread="thread"></NewPost>
 
     <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
