@@ -7,6 +7,7 @@ import MainFooter from "@/components/footers/MainFooter.vue";
 import CommonHeader from "@/components/headers/CommonHeader.vue";
 import CommonFooter from "@/components/footers/CommonFooter.vue";
 import NotFound from "@/components/main_components/NotFound.vue";
+import AboutPage from "@/components/main_components/AboutPage.vue";
 
 const routes = [
     {
@@ -36,6 +37,15 @@ const routes = [
             default: ThreadPosts,
             header: CommonHeader,
             footer: CommonFooter
+        }
+    },
+    {
+        path: '/about',
+        name: 'about',
+        components: {
+            default: AboutPage,
+            header: MainHeader,
+            footer: MainFooter
         }
     },
     {

@@ -121,7 +121,7 @@ const showOriginalText = () => {
 .post-container {
   background-color: #f0f0f0;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 20px;
   margin-bottom: 10px;
   max-width: 600px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

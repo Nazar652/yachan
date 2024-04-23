@@ -18,13 +18,12 @@ header {
   justify-content: center;
   align-items: stretch;
   gap: 5px;
-  height: 30px;
-  background-color: #f0f0f0;
+  background-color: #f6f6f6;
   border-radius: 10px;
   padding: 10px;
   max-width: 600px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 50px auto;
+  margin: 0 auto 50px;
 }
 
 a {

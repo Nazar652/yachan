@@ -6,21 +6,26 @@ import SingleThread from "@/components/threads/SingleThread.vue";
 import {hostname} from "@/scripts/global/globalVariables";
 import {useRouter} from 'vue-router'
 import fetchSingleCategory from "@/scripts/categories/fetchSingleCategory";
+import PaginationComponent from "@/components/main_components/PaginationComponent.vue";
+
+const router = useRouter()
 
 const props = defineProps(['category'])
 const category = ref(props.category)
 const cat = ref(null)
 const threads = ref([])
-const router = useRouter()
+const pages = ref([])
+const page = ref(Number(router.currentRoute.value.query.page) || 1)
+const pagesCount = ref(1)
 
-
-async function getThreads() {
-  threads.value = await fetchThreads(category.value);
-
-}
 
 async function getCategory() {
   cat.value = await fetchSingleCategory(category.value)
+}
+
+async function getThreads() {
+  threads.value = await fetchThreads(category.value, page.value);
+  pagesCount.value = Math.ceil(threads.value.count / 5)
 }
 
 try {
@@ -30,6 +35,18 @@ try {
   router.push({name: 'notFound'});
 }
 
+function makePagesArray() {
+  pages.value = []
+  for (let i = 1; i <= pagesCount.value; i++) {
+    if (i === 1 || i === pagesCount.value || (i >= page.value - 2 && i <= page.value + 2)) {
+      pages.value.push(i)
+    } else if (pages.value[pages.value.length - 1] !== 0) {
+      pages.value.push(0)
+    }
+  }
+}
+
+makePagesArray()
 
 const webSocket = new WebSocket(`ws://${hostname}/ws/category/${category.value}/`)
 webSocket.onmessage = categoryUpdate
@@ -40,13 +57,19 @@ watch(() => props.category, (newSlug) => {
   getThreads()
 });
 
+watch(() => router.currentRoute.value.query.page, async (newPage) => {
+  page.value = Number(newPage)
+  await getThreads()
+  makePagesArray()
+})
+
 onUnmounted(() => {
   webSocket.close()
 })
 
-function categoryUpdate(event) {
-  console.log(event.data)
+function categoryUpdate() {
   getThreads()
+  makePagesArray()
 }
 </script>
 
@@ -54,10 +77,12 @@ function categoryUpdate(event) {
   <div v-if="cat !== null">
     <NewThread :category="category"/>
     <div class="threads">
-      <div v-for="thread in threads" v-bind:key="thread.text">
+      <div v-for="thread in threads.results" v-bind:key="thread.text">
         <SingleThread :thread="thread" :isOpen="false"/>
       </div>
     </div>
+    <PaginationComponent :link_name="'category'" :params="{category: category}" :page="page"
+                         :pages="pages" :pages-count="pagesCount"/>
   </div>
 </template>
 

@@ -35,7 +35,7 @@ class Post(Model):
     is_op = BooleanField(default=False)
 
     class Meta:
-        ordering = ['time_created']
+        ordering = ['-time_created']
 
 
 class ImageModel(Model):

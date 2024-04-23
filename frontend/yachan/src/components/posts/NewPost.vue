@@ -1,57 +1,57 @@
 <script setup>
-import { ref, defineProps } from 'vue';
-  import createNewPost from '@/scripts/posts/createNewPost'
+import {ref, defineProps} from 'vue';
+import createNewPost from '@/scripts/posts/createNewPost'
 import {getToken} from "@/scripts/global/tokenUtils";
 
-  const props = defineProps(['thread'])
+const props = defineProps(['thread'])
 
-  const subject = ref('')
-  const text = ref('')
-  const author_name = ref('')
-  const thread = ref(props.thread)
-  const uploaded_images = ref(null)
+const subject = ref('')
+const text = ref('')
+const author_name = ref('')
+const thread = ref(props.thread)
+const uploaded_images = ref(null)
 
-  const { newPost } = createNewPost()
+const {newPost} = createNewPost()
 
-  const submitForm = async () => {
-    try {
-      if (uploaded_images.value.files.length > 5) {
-        alert("You can only upload a maximum of 5 images")
-        return
-      }
-      let is_op = false
-      console.log(thread.value.author)
-      if (thread.value.author === getToken()) {
-        is_op = true
-      }
-      const threadData = {
-        subject: subject.value,
-        text: text.value,
-        author_name: author_name.value,
-        thread: thread.value.id,
-        uploaded_images: uploaded_images.value.files,
-        author: getToken(),
-        is_op: is_op
-      };
-      await newPost(threadData);
-
-      subject.value = '';
-      text.value = '';
-      author_name.value = '';
-      uploaded_images.value.value = null;
-
-    } catch (error) {
-      console.error(error);
+const submitForm = async () => {
+  try {
+    if (uploaded_images.value.files.length > 5) {
+      alert("You can only upload a maximum of 5 images")
+      return
     }
+    let is_op = false
+    console.log(thread.value.author)
+    if (thread.value.author === getToken()) {
+      is_op = true
+    }
+    const threadData = {
+      subject: subject.value,
+      text: text.value,
+      author_name: author_name.value,
+      thread: thread.value.id,
+      uploaded_images: uploaded_images.value.files,
+      author: getToken(),
+      is_op: is_op
+    };
+    await newPost(threadData);
+
+    subject.value = '';
+    text.value = '';
+    author_name.value = '';
+    uploaded_images.value.value = null;
+
+  } catch (error) {
+    console.error(error);
   }
+}
 </script>
 
 <template>
   <div class="newPost">
     <form @submit.prevent="submitForm">
       <div>
-        <input v-model="subject" type="text" placeholder="Subject" />
-        <input v-model="author_name" type="text" placeholder="Name" />
+        <input v-model="subject" type="text" placeholder="Subject"/>
+        <input v-model="author_name" type="text" placeholder="Name"/>
       </div>
       <textarea id="text" v-model="text" placeholder="Text" required></textarea>
       <label for="upload_images">Images:</label>
@@ -62,7 +62,7 @@ import {getToken} from "@/scripts/global/tokenUtils";
 </template>
 
 <style scoped>
-  .newPost {
+.newPost {
   display: flex;
   justify-content: center;
   align-items: center;
