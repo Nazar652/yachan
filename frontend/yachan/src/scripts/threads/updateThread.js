@@ -5,7 +5,7 @@ export default function updateThread() {
     const editThread = async (newData) => {
         try {
             const formData = new FormData();
-            formData.append('text', newData.text);
+            formData.append('updated_text', newData.updated_text);
 
             const response = await axios.patch(`${host}/api/threads/${newData.id}/`, formData, {
                 headers: {

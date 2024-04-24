@@ -1,10 +1,11 @@
 <script setup>
-import {defineProps, ref} from 'vue'
+import {defineProps, ref, watchEffect} from 'vue'
 import {getToken} from "@/scripts/global/tokenUtils";
 import EditPost from "@/components/posts/EditPost.vue";
 
-const props = defineProps(['post'])
+const props = defineProps(['post', 'inThread'])
 const post = ref(props.post);
+const inThread = ref(props.inThread)
 
 let edit = ref(false)
 let showOldText = ref(false)
@@ -25,22 +26,24 @@ const showOriginalText = () => {
   showOldText.value = true;
 }
 
+watchEffect(() => {
+  post.value = props.post
+})
+
 </script>
 
 <template>
   <div class="post-container">
     <div class="post-top">
-      <div class="subject">
-        <p>subject:</p>
+      <div class="post-id">
+        <p>ID: {{ post.id }}</p>
+      </div>
+      <div class="subject" v-if="post.subject">
         <p>{{ post.subject }}</p>
       </div>
-      <div class="author-name" v-if="post.author_name">
-        <p>author:</p>
-        <p>{{ post.author_name }}</p>
-      </div>
-      <div class="time-created">
-        <p>time created:</p>
-        <p>{{ post.time_created.replace('T', ' ').slice(0, -8) }}</p>
+      <div class="author-name">
+        <p class="author-name-text"><span v-if="post.author_name">{{ post.author_name }}</span> <span
+            class="you-mark" v-if="post.author === getToken()">(You)</span></p>
       </div>
       <div class="op" v-if="post.is_op">OP</div>
       <div class="edit" v-if="post.author === getToken() && !post.updated_text" @click="toggleEdit">
@@ -50,31 +53,42 @@ const showOriginalText = () => {
         Show old
       </div>
     </div>
-    <div class="images">
-      <img v-for="img in post.images" :src="img.image" alt="image" v-bind:key="img.id" class="image">
-    </div>
-    <div class="text">
-      <p>{{ post.updated_text ? (showOldText ? post.text : post.updated_text) : post.text }}</p>
-    </div>
-    <div class="edit-panel" v-if="edit && post.author === getToken() && !post.updated_text">
-      <EditPost :post="post" :setEdit="setEdit"></EditPost>
+    <div class="img-text">
+      <div class="images" :class="{smallImages:!inThread}" v-if="post.images.length">
+        <div class="image-block" v-for="img in post.images" v-bind:key="img.id">
+          <img :src="img.image" alt="image" class="image"
+               :class="{smallImage:!inThread}">
+        </div>
+      </div>
+      <div class="text-time">
+        <div class="text">
+          <p v-if="inThread">{{ post.updated_text ? (showOldText ? post.text : post.updated_text) : post.text }}</p>
+          <p v-else>{{
+              post.updated_text ? (showOldText ? post.text.slice(0, 300) : post.updated_text.slice(0, 300)) : post.text.slice(0, 300)
+            }}...</p>
+        </div>
+        <div class="edit-panel" v-if="edit && post.author === getToken() && !post.updated_text">
+          <EditPost :post="post" :setEdit="setEdit"></EditPost>
+        </div>
+        <div class="time-created">
+          <p>{{ post.time_created.replace('T', ' ').slice(0, -8) }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 
-.post-top {
-  display: flex;
-  gap: 10px;
-  font-weight: 700;
-}
 
 .image {
   width: 200px;
 }
 
-/* styles for post headers: subject, author name, date */
+.smallImage {
+  width: 100px;
+}
+
 .subject, .author-name, .time-created {
   display: flex;
   gap: 5px;
@@ -90,40 +104,46 @@ const showOriginalText = () => {
 .edit {
   background-color: #3498db;
   color: white;
-  padding: 5px;
   border-radius: 5px;
   cursor: pointer;
+  height: 30px;
+  width: 80px;
 }
 
 .edit-panel {
   margin-top: 10px;
+  align-self: flex-start;
+  width: 100%;
 }
 
 /* styles for post text */
 .text {
   margin-top: 10px;
   font-size: 1.2rem;
+  overflow-wrap: anywhere;
 }
 
 /* styles for images */
 
 .images {
-  display: flex;
-  gap: 10px;
+  display: grid;
   margin-top: 10px;
+  grid-template-columns: repeat(auto-fit, 200px);
+  grid-gap: 10px;
+  max-width: 620px;
 }
 
-.images img {
-  max-width: 100%;
-  max-height: 100%;
+.smallImages {
+  grid-template-columns: repeat(auto-fit, 100px);
+  max-width: 320px;
+  max-height: 210px;
 }
 
 .post-container {
   background-color: #f0f0f0;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 20px;
   margin-bottom: 10px;
-  max-width: 600px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -131,20 +151,19 @@ const showOriginalText = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
+  gap: 10px;
+  height: 20px;
+}
+
+.post-top, .time-created {
+  font-weight: 700;
+  font-size: 14px;
   color: #888;
-  margin-bottom: 10px;
 }
 
 .text {
   font-size: 1rem;
   line-height: 1.4;
-}
-
-.images {
-  display: flex;
-  gap: 5px;
-  overflow-x: auto;
 }
 
 .edit, .edit-panel {
@@ -153,5 +172,28 @@ const showOriginalText = () => {
 
 .post-container:hover .edit, .post-container:hover .edit-panel {
   display: block;
+}
+
+.post-container:hover .edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-text {
+  display: flex;
+  gap: 20px;
+}
+
+.text-time {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+
+.text {
+  align-self: flex-start;
 }
 </style>

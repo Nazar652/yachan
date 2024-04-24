@@ -26,7 +26,9 @@ async function getThread() {
 
 
 async function getPosts() {
-  posts.value = await fetchPosts(threadId.value, page.value)
+  const newPosts = await fetchPosts(threadId.value, page.value)
+  posts.value = []
+  posts.value = await newPosts
   pagesCount.value = Math.ceil(posts.value.count / 10)
 }
 
@@ -57,6 +59,8 @@ watch(() => props.thread_id, async (newThreadId) => {
   threadId.value = newThreadId
   await getThread()
   await getPosts()
+  makePagesArray()
+  page.value = 1
 })
 
 watch(() => router.currentRoute.value.query.page, async (newPage) => {
@@ -72,6 +76,7 @@ onUnmounted(() => {
 function threadUpdate(event) {
   const newPostData = JSON.parse(event.data);
   if (newPostData.type === "send.posts.update.notification") {
+    console.log(newPostData)
     getPosts()
   } else if (newPostData.type === "send.thread.update.notification") {
     getThread()
@@ -83,18 +88,17 @@ function threadUpdate(event) {
 
 <template>
   <div v-if="thread !== null">
-    <NewPost :thread="thread"></NewPost>
-
-    <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
-
-    <div class="posts">
-      <div v-for="post in posts.results" v-bind:key="post.text" class="post">
-        <SinglePost :post="post"/>
-      </div>
+    <div class="thread-new-post">
+      <SingleThread :thread="thread" :isOpen="true" v-bind:key="thread.text"></SingleThread>
+      <NewPost :thread="thread"></NewPost>
     </div>
     <PaginationComponent :link_name="'thread'" :params="{thread_id: threadId}" :page="page"
                          :pages="pages" :pages-count="pagesCount"/>
-    <NewPost :thread="thread"></NewPost>
+    <div class="posts">
+      <div v-for="post in posts.results" v-bind:key="post.text" class="post">
+        <SinglePost :post="post" :in-thread="true"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,6 +111,16 @@ function threadUpdate(event) {
   margin: 50px auto;
   align-items: flex-start;
   gap: 30px;
+}
+
+.thread-new-post {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.thread-new-post > *{
+  flex-basis: 50%;
 }
 
 </style>

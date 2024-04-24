@@ -4,9 +4,11 @@
     <router-view name="header"></router-view>
   </Suspense>
   <div class="wrapper">
-    <Suspense>
-      <router-view></router-view>
-    </Suspense>
+    <div class="wrapper-inner">
+      <Suspense>
+        <router-view></router-view>
+      </Suspense>
+    </div>
   </div>
   <router-view name="footer"></router-view>
 </template>
@@ -33,8 +35,12 @@ body {
   background-color: #e0f0f8;
 }
 
-.wrapper {
+.wrapper-inner {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.wrapper {
+  padding-bottom: 40px;
 }
 </style>

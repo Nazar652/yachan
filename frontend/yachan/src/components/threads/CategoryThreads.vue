@@ -48,13 +48,19 @@ function makePagesArray() {
 
 makePagesArray()
 
-const webSocket = new WebSocket(`ws://${hostname}/ws/category/${category.value}/`)
-webSocket.onmessage = categoryUpdate
+function webSocketConnect(cat) {
+  const webSocket = new WebSocket(`ws://${hostname}/ws/category/${cat}/`)
+  webSocket.onmessage = categoryUpdate
+  return webSocket
+}
 
+let webSocket = webSocketConnect(category.value)
 
-watch(() => props.category, (newSlug) => {
+watch(() => props.category, async (newSlug) => {
   category.value = newSlug
-  getThreads()
+  await getThreads()
+  await getCategory()
+  webSocket = webSocketConnect(category.value)
 });
 
 watch(() => router.currentRoute.value.query.page, async (newPage) => {
@@ -68,6 +74,7 @@ onUnmounted(() => {
 })
 
 function categoryUpdate() {
+  console.log('category update')
   getThreads()
   makePagesArray()
 }
@@ -75,7 +82,16 @@ function categoryUpdate() {
 
 <template>
   <div v-if="cat !== null">
-    <NewThread :category="category"/>
+    <div class="category-header">
+      <h1>{{ cat.name }}</h1>
+      <p>{{ cat.description }}</p>
+    </div>
+    <div class="newThread">
+      <NewThread :category="category"/>
+    </div>
+    <PaginationComponent :link_name="'category'" :params="{category: category}" :page="page"
+                         :pages="pages" :pages-count="pagesCount"/>
+
     <div class="threads">
       <div v-for="thread in threads.results" v-bind:key="thread.text">
         <SingleThread :thread="thread" :isOpen="false"/>
@@ -92,7 +108,34 @@ function categoryUpdate() {
   flex-direction: column;
   max-width: 1200px;
   margin: 50px auto;
-  align-items: flex-start;
   gap: 30px;
+}
+.newThread {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.category-header h1 {
+  font-size: 2rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.category-header p {
+  font-size: 1.2rem;
+  color: #666;
 }
 </style>

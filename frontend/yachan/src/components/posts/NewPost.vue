@@ -49,6 +49,7 @@ const submitForm = async () => {
 <template>
   <div class="newPost">
     <form @submit.prevent="submitForm">
+      <h2>New Post</h2>
       <div>
         <input v-model="subject" type="text" placeholder="Subject"/>
         <input v-model="author_name" type="text" placeholder="Name"/>
@@ -66,7 +67,6 @@ const submitForm = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 50px auto;
   background-color: #f0f0f0;
   border-radius: 10px;
   padding: 10px;
@@ -97,5 +97,13 @@ const submitForm = async () => {
 
 .newPost button:hover {
   background-color: #2980b9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #888;
+  font-size: 24px;
+  font-weight: 700;
 }
 </style>

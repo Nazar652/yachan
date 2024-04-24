@@ -45,6 +45,7 @@ watch(() => props.category, (newSlug) => {
 <template>
   <div class="newThread">
     <form @submit.prevent="submitForm" id="newThreadForm">
+      <h2>New Thread</h2>
       <div>
         <input v-model="subject" type="text" placeholder="Subject" required/>
         <input v-model="author_name" type="text" placeholder="Name"/>
@@ -62,11 +63,43 @@ watch(() => props.category, (newSlug) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 50px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-form {
+.newThread form {
   display: flex;
   flex-direction: column;
+}
+
+.newThread input, .newThread textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #888;
+}
+
+.newThread button {
+  background-color: #3498db;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.newThread button:hover {
+  background-color: #2980b9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #888;
+  font-size: 24px;
+  font-weight: 700;
 }
 </style>

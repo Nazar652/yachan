@@ -6,14 +6,16 @@
 </script>
 
 <template>
-  <header >
+  <header>
+    <div class="header">
       <router-link v-for="item in navItems" v-bind:key="item.id" :to="item.url"><p class="nav-item">{{ item.name }}</p></router-link>
+    </div>
   </header>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
-header {
+.header {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -21,9 +23,9 @@ header {
   background-color: #f6f6f6;
   border-radius: 10px;
   padding: 10px;
-  max-width: 600px;
+  max-width: 1200px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 0 auto 50px;
+  margin: 0 auto 20px;
 }
 
 a {

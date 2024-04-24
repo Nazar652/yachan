@@ -20,7 +20,7 @@ class ThreadPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class CategoryViewSet(ReadOnlyModelViewSet):
+class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'

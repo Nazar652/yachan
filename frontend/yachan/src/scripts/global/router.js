@@ -5,7 +5,7 @@ import ThreadPosts from "@/components/posts/ThreadPosts.vue";
 import MainHeader from "@/components/headers/MainHeader.vue";
 import MainFooter from "@/components/footers/MainFooter.vue";
 import CommonHeader from "@/components/headers/CommonHeader.vue";
-import CommonFooter from "@/components/footers/CommonFooter.vue";
+// import CommonFooter from "@/components/footers/CommonFooter.vue";
 import NotFound from "@/components/main_components/NotFound.vue";
 import AboutPage from "@/components/main_components/AboutPage.vue";
 
@@ -26,7 +26,7 @@ const routes = [
         components: {
             default: CategoryThreads,
             header: CommonHeader,
-            footer: CommonFooter
+            footer: MainFooter
         }
     },
     {
@@ -36,7 +36,7 @@ const routes = [
         components: {
             default: ThreadPosts,
             header: CommonHeader,
-            footer: CommonFooter
+            footer: MainFooter
         }
     },
     {
@@ -58,7 +58,7 @@ const routes = [
         components: {
             default: NotFound,
             header: CommonHeader,
-            footer: CommonFooter
+            footer: MainFooter
         }
     }
 ]

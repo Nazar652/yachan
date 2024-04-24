@@ -18,10 +18,10 @@ console.log(threads.value)
     <div class="categories-list">
       <div v-for="category in categories" :key="category.id" class="category">
         <router-link :to="{ name: 'category', params: { category: category.slug } }">
-          {{ category.name }}
+          {{ category.name }} <span v-if="category.nsfw" class="nsfw">18+</span>
         </router-link>
         <div class="desc">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, voluptate.
+          {{category.description}}
         </div>
       </div>
     </div>
@@ -66,13 +66,13 @@ a:hover {
 .categories-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  gap: 30px;
   justify-content: center;
   align-items: center;
 }
 
 .category {
-  width: 200px;
+  width: 300px;
   padding: 10px 20px;
   border-radius: 5px;
   background-color: #f6f6f6;
@@ -82,6 +82,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  height: 250px;
 }
 
 .thread h3 {
@@ -111,7 +112,6 @@ h2 {
 
 .thread {
   width: 300px;
-  height: 200px;
   padding: 20px;
   border-radius: 10px;
   background-color: #f6f6f6;
@@ -131,7 +131,7 @@ h2 {
 
 .img {
   flex-basis: 100px;
-  height: 100px;
+  min-height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,5 +160,9 @@ h2 {
 
 .threads-heading {
   margin-bottom: 20px;
+}
+
+.nsfw {
+  color: red
 }
 </style>

@@ -31,5 +31,30 @@ const submitForm = async () => {
 </template>
 
 <style scoped>
+#editPostForm {
+  display: flex;
+  flex-direction: column;
+}
 
+#editPostForm textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #888;
+}
+
+#editPostForm button {
+  background-color: #3498db;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  width: 50px;
+  align-self: flex-end;
+}
+
+#editPostForm button:hover {
+  background-color: #2980b9;
+}
 </style>
