@@ -8,6 +8,7 @@ import CommonHeader from "@/components/headers/CommonHeader.vue";
 // import CommonFooter from "@/components/footers/CommonFooter.vue";
 import NotFound from "@/components/main_components/NotFound.vue";
 import AboutPage from "@/components/main_components/AboutPage.vue";
+import LoginComponent from "@/components/main_components/LoginComponent.vue";
 
 const routes = [
     {
@@ -58,6 +59,15 @@ const routes = [
         components: {
             default: NotFound,
             header: CommonHeader,
+            footer: MainFooter
+        }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        components: {
+            default: LoginComponent,
+            header: MainHeader,
             footer: MainFooter
         }
     }

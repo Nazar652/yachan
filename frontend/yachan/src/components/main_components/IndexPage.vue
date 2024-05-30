@@ -7,8 +7,6 @@ const categories = ref(null)
 const threads = ref(null)
 categories.value = await fetchCategories()
 threads.value = (await fetchThreads(null, null, 9)).results
-console.log(categories.value)
-console.log(threads.value)
 
 </script>
 

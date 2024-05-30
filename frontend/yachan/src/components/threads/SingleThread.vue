@@ -6,15 +6,17 @@ import fetchPosts from "@/scripts/posts/fetchPosts";
 import {hostname} from "@/scripts/global/globalVariables";
 import {useRouter} from 'vue-router';
 import SinglePost from "@/components/posts/SinglePost.vue";
+import deleteThread from "@/scripts/threads/deleteThread";
 
 const router = useRouter();
 
-const props = defineProps(['thread', 'isOpen', 'posts'])
+const props = defineProps(['thread', 'isOpen', 'posts', 'authenticated'])
 const thread = ref(props.thread)
 const isOpen = ref(props.isOpen)
 const edit = ref(false)
 const posts = ref(props.posts)
 let showOldText = ref(false)
+const authenticated = ref(props.authenticated)
 
 
 const toggleEdit = () => {
@@ -60,6 +62,10 @@ function threadUpdate(event) {
     getPosts()
   }
 }
+
+async function delThread() {
+  await deleteThread(thread.value.id)
+}
 </script>
 
 <template>
@@ -102,6 +108,10 @@ function threadUpdate(event) {
         <div class="time-created">
           <p>{{ thread.time_created.replace('T', ' ').slice(0, -8) }}</p>
         </div>
+        <div><div class="delete-button" v-if="authenticated" @click="delThread()">
+          Delete
+        </div></div>
+
       </div>
     </div>
     <div class="thread-posts" v-if="!isOpen">
@@ -110,7 +120,7 @@ function threadUpdate(event) {
       </div>
       <div class="posts">
         <div v-for="post in posts.results.slice(0, 4)" v-bind:key="post.text" class="post">
-          <SinglePost :post="post" :in-thread="false"/>
+          <SinglePost :post="post" :in-thread="false" :authenticated="authenticated"/>
         </div>
         <div class="nobody-post" v-if="!posts.results.length">Nobody posted anything yet</div>
       </div>
@@ -202,5 +212,21 @@ function threadUpdate(event) {
 
 .you-mark {
   font-weight: 700;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
 }
 </style>

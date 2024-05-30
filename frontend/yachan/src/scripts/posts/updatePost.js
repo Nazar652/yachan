@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {host} from "@/scripts/global/globalVariables";
+import {getToken} from "@/scripts/global/tokenUtils";
 
 export default function updatePost() {
     const editPost = async (newData) => {
@@ -10,6 +11,7 @@ export default function updatePost() {
             const response = await axios.patch(`${host}/api/posts/${newData.id}/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'usertoken': getToken()
                 },
             });
 

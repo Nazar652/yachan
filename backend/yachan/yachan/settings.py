@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os.path
 
+from corsheaders.defaults import default_headers
+
 from .config import *
 
 from pathlib import Path
@@ -21,9 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&y1er&j#p4o2a6$f1bc$@rqzp=3y(1@7inx0xqf@ad)mwa#wz#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -141,12 +140,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 MEDIA_URL = '/media/'
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://192.168.31.194:8080',
-#     'http://localhost:8080'
-# ]
+CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://192.168.31.194:8080',
+    'http://localhost:8080'
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'usertoken',
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8080",
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']

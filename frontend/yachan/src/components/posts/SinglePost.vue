@@ -2,10 +2,12 @@
 import {defineProps, ref, watchEffect} from 'vue'
 import {getToken} from "@/scripts/global/tokenUtils";
 import EditPost from "@/components/posts/EditPost.vue";
+import deletePost from "@/scripts/posts/deletePost";
 
-const props = defineProps(['post', 'inThread'])
+const props = defineProps(['post', 'inThread', 'authenticated'])
 const post = ref(props.post);
 const inThread = ref(props.inThread)
+const authenticated = ref(props.authenticated)
 
 let edit = ref(false)
 let showOldText = ref(false)
@@ -30,6 +32,9 @@ watchEffect(() => {
   post.value = props.post
 })
 
+async function delPost() {
+  await deletePost(post.value.id)
+}
 </script>
 
 <template>
@@ -46,9 +51,6 @@ watchEffect(() => {
             class="you-mark" v-if="post.author === getToken()">(You)</span></p>
       </div>
       <div class="op" v-if="post.is_op">OP</div>
-      <div class="edit" v-if="post.author === getToken() && !post.updated_text" @click="toggleEdit">
-        Edit post
-      </div>
       <div class="show_old" v-if="post.updated_text" @mouseover="showOriginalText" @mouseleave="showUpdatedText">
         Show old
       </div>
@@ -70,8 +72,18 @@ watchEffect(() => {
         <div class="edit-panel" v-if="edit && post.author === getToken() && !post.updated_text">
           <EditPost :post="post" :setEdit="setEdit"></EditPost>
         </div>
-        <div class="time-created">
-          <p>{{ post.time_created.replace('T', ' ').slice(0, -8) }}</p>
+        <div class="edit-time">
+          <div>
+            <div class="edit" v-if="post.author === getToken() && !post.updated_text" @click="toggleEdit">
+              Edit post
+            </div>
+          </div>
+          <div class="time-created">
+            <p>{{ post.time_created.replace('T', ' ').slice(0, -8) }}</p>
+          </div>
+        </div>
+        <div class="delete-button" v-if="authenticated" @click="delPost()">
+          Delete
         </div>
       </div>
     </div>
@@ -195,5 +207,29 @@ watchEffect(() => {
 
 .text {
   align-self: flex-start;
+}
+
+.edit-time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  gap: 20px;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
 }
 </style>

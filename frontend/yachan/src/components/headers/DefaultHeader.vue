@@ -1,5 +1,6 @@
 <script setup>
   import {defineProps, ref} from 'vue'
+  import LogoutComponent from "@/components/main_components/LogoutComponent.vue";
 
   let props = defineProps(['navItems'])
   let navItems = ref(props.navItems)
@@ -9,6 +10,7 @@
   <header>
     <div class="header">
       <router-link v-for="item in navItems" v-bind:key="item.id" :to="item.url"><p class="nav-item">{{ item.name }}</p></router-link>
+      <LogoutComponent/>
     </div>
   </header>
 </template>

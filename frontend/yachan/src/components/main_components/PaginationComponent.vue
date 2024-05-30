@@ -1,25 +1,40 @@
 <script setup>
 import {defineProps, ref, watchEffect} from 'vue'
 
-const props = defineProps(['link_name', 'params', 'page', 'pages', 'pagesCount'])
+const props = defineProps(['link_name', 'params', 'page', 'count', 'delim'])
 const linkName = ref(props.link_name)
 const params = ref(props.params)
 const page = ref(props.page)
-const pages = ref(props.pages)
-const pagesCount = ref(props.pagesCount)
+const pagesCount = ref(null)
+const count = ref(props.count)
+const delim = ref(props.delim)
+const pages = ref([])
 
+function makePagesArray() {
+  pages.value = []
+  pagesCount.value = Math.ceil(count.value / delim.value)
+  for (let i = 1; i <= pagesCount.value; i++) {
+    if (i === 1 || i === pagesCount.value || (i >= page.value - 2 && i <= page.value + 2)) {
+      pages.value.push(i)
+    } else if (pages.value[pages.value.length - 1] !== 0) {
+      pages.value.push(0)
+    }
+  }
+}
+
+makePagesArray()
 watchEffect(() => {
   linkName.value = props.link_name
   params.value = props.params
   page.value = props.page
-  pages.value = props.pages
-  pagesCount.value = props.pagesCount
+  count.value = props.count
+  delim.value = props.delim
+  makePagesArray()
 });
-
 </script>
 
 <template>
-  <div class="pages">
+  <div class="pages" v-if="pagesCount>0">
     <div class="pages-list">
       <div class="pagination-link pag-prev" v-if="page !== 1">
         <router-link :to="{ name: linkName, params: params, query: {page: page-1} }">&lt;

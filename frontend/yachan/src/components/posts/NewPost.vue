@@ -20,7 +20,6 @@ const submitForm = async () => {
       return
     }
     let is_op = false
-    console.log(thread.value.author)
     if (thread.value.author === getToken()) {
       is_op = true
     }

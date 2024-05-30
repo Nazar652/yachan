@@ -1,2 +1,2 @@
-export const hostname = '176.36.136.93:8000'
+export const hostname = 'localhost:8000'
 export const host = `http://${hostname}`
