@@ -36,8 +36,8 @@ class ThreadSerializer(ModelSerializer):
 
     class Meta:
         model = ThreadModel
-        fields = ["id", "subject", "text", "updated_text", "author", "author_name", "time_created", "category",
-                  "images", "uploaded_images"]
+        fields = ["id", "subject", "text", "updated_text", "author", "author_name",
+                  "time_created", "category", "images", "uploaded_images"]
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop("uploaded_images")
@@ -61,8 +61,8 @@ class PostSerializer(ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "subject", "text", "updated_text", "time_created", "time_updated", "author", "author_name",
-                  "thread", "images", "uploaded_images", "is_op"]
+        fields = ["id", "subject", "text", "updated_text", "time_created", "time_updated",
+                  "author", "author_name", "thread", "images", "uploaded_images", "is_op"]
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop("uploaded_images", [])
